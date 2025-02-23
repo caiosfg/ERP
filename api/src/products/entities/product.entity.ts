@@ -1,16 +1,31 @@
-import { IsDate, IsNotEmpty, IsNumber, MaxLength } from "class-validator";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
+@Entity('product')
 export class Product {
-  @IsNumber()
+  @PrimaryGeneratedColumn()
   id: number;
-  @IsNotEmpty()
-  @MaxLength(255)
+
+  @Column({ type: 'varchar', length: 255 })
   description: string;
-  @MaxLength(255)
+
+  @Column({ type: 'varchar', length: 255 })
   price: string;
-  @IsNumber()
+
+  @Column()
   stock: number;
+
+  @Column()
   image: string;
-  @IsDate()
-  date: Date;
+
+  @CreateDateColumn()
+  createdAt?: Date;
+
+  @UpdateDateColumn()
+  updatedAt?: Date;
 }
