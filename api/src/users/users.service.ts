@@ -33,8 +33,14 @@ export class UsersService {
     }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.userRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
+
+    return users;
   }
 
   findOne(id: number) {
@@ -45,7 +51,13 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.userRepository.findOneBy({
+      id,
+    });
+
+    if (!user) throw new NotFoundException(`User ${id} not found !`);
+
+    return this.userRepository.remove(user);
   }
 }
