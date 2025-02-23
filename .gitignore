@@ -1,5 +1,4 @@
-/dist
-api/dist
+dist
 node_modules
 build
 
