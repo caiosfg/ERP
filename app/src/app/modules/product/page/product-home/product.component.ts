@@ -1,5 +1,6 @@
 import { ProductService } from './../../services/product.service';
 import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/models/interfaces/product.interface'
 
 @Component({
   selector: 'app-product',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
+  productData !: Product;
   constructor(private productService: ProductService) { }
   ngOnInit(): void {
     this.getAllProducts();
@@ -16,7 +18,8 @@ export class ProductComponent implements OnInit {
     this.productService.getAllProducts()
     .subscribe({
       next: (response) => {
-        console.log("🚀 ~ ProductComponent ~ getAllProducts ~ response:", response)
+        response && (this.productData = response)
+        console.log("🚀 ~ ProductComponent ~ getAllProducts ~ response:", this.productData)
       },
       error: (error) => console.log('error', error),
     })
