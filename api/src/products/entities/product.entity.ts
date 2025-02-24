@@ -1,9 +1,10 @@
-import { Order } from 'src/orders/entities/order.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -31,6 +32,10 @@ export class Product {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @OneToMany(() => Order, (order) => order.product_id)
-  ordersSend: Order[];
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user_id: User;
 }

@@ -4,22 +4,49 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll() {
-    const products = await this.productRepository.find();
+    const products = await this.productRepository.find({
+      relations: ['user_id'],
+      order: {
+        id: 'DESC',
+      },
+      select: {
+        user_id: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    });
     return products;
   }
 
   async findOne(id: number) {
-    const product = await this.productRepository.findOneBy({
-      id,
+    const product = await this.productRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['user_id'],
+      order: {
+        id: 'DESC',
+      },
+      select: {
+        user_id: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
     });
 
     if (!product) return this.throwNotFoundError();
@@ -28,26 +55,55 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto) {
+    const user = await this.usersService.findOne(createProductDto.user_id);
+
     const newProduct = {
-      ...createProductDto,
-      data: new Date(),
+      description: createProductDto.description,
+      price: createProductDto.price,
+      stock: createProductDto.stock,
+      image: createProductDto.image,
+      user_id: user,
     };
 
     const product = this.productRepository.create(newProduct);
-    return this.productRepository.save(product);
+    await this.productRepository.save(product);
+
+    return {
+      ...product,
+      user_id: user.id,
+    };
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.preload({
-      id,
-      ...updateProductDto,
-    });
+    if (updateProductDto.user_id) {
+      const user = await this.usersService.findOne(updateProductDto.user_id);
 
-    if (!product) return this.throwNotFoundError();
+      const product = await this.findOne(id);
+      if (!product) return this.throwNotFoundError();
 
-    await this.productRepository.save(product);
+      if (updateProductDto?.description) {
+        product.description = updateProductDto.description;
+      }
 
-    return product;
+      if (updateProductDto?.price) {
+        product.price = updateProductDto.price;
+      }
+
+      if (updateProductDto?.stock) {
+        product.stock = updateProductDto.stock;
+      }
+
+      if (updateProductDto?.image) {
+        product.image = updateProductDto.image;
+      }
+
+      product.user_id = user;
+
+      await this.productRepository.save(product);
+      return product;
+    } else {
+      throw new NotFoundException('user_id não informado');
+    }
   }
 
   async delete(id: number) {

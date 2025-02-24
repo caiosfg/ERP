@@ -15,4 +15,7 @@ export class CreateProductDto {
 
   @IsString()
   readonly image: string;
+
+  @IsNumber()
+  readonly user_id: number;
 }
