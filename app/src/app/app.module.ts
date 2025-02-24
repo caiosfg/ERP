@@ -20,9 +20,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PersonHomeComponent } from './modules/person/page/person-home/person-home.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PersonHomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
