@@ -7,11 +7,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AuthTokenInterceptor } from 'src/common/auth-token.interceptor';
 
+@UseInterceptors(AuthTokenInterceptor)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
