@@ -117,6 +117,6 @@ export class ProductsService {
   }
 
   throwNotFoundError() {
-    throw new NotFoundException('Produto não encontrado');
+    throw new NotFoundException('Product not found');
   }
 }

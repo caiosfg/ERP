@@ -117,6 +117,6 @@ export class PersonsService {
   }
 
   throwNotFoundError() {
-    throw new Error('Cliente não encontrado');
+    throw new Error('Client not found');
   }
 }
