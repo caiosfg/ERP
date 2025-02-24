@@ -1,5 +1,4 @@
 import { IsEmail } from 'class-validator';
-import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -7,7 +6,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,16 +18,12 @@ export class Person {
   @Column({ length: 255 })
   name: string;
 
-  @Column()
+  @Column({ nullable: true, type: 'bigint' })
   cnpj: number;
 
   @Column()
   @IsEmail()
   email: string;
-
-  @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'user_id' })
-  user_id: User;
 
   @CreateDateColumn()
   createdAt?: Date;
@@ -37,6 +31,10 @@ export class Person {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @OneToMany(() => Order, (order) => order.person_id)
-  ordersSend: Order[];
+  @ManyToOne(() => User, (user) => user.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user_id: User;
 }

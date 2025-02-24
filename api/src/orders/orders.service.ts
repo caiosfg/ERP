@@ -12,18 +12,18 @@ export class OrdersService {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
+   create(createOrderDto: CreateOrderDto) {
     try {
-      const orderDto = {
-        person_id: createOrderDto.person_id,
-        product_id: createOrderDto.product_id,
-        amount: createOrderDto.amount,
-      };
+      // const orderDto = {
+      //   person_id: createOrderDto.person_id,
+      //   product_id: createOrderDto.product_id,
+      //   amount: createOrderDto.amount,
+      // };
 
-      const order = this.orderRepository.create(orderDto);
-      await this.orderRepository.save(order);
+      // const order = this.orderRepository.create(orderDto);
+      // await this.orderRepository.save(order);
 
-      return order;
+      // return order;
     } catch (error) {
       throw new NotFoundException(`message: ${error}`);
     }
@@ -49,23 +49,23 @@ export class OrdersService {
     return order;
   }
 
-  async update(id: number, updateOrderDto: UpdateOrderDto) {
+  update(id: number, updateOrderDto: UpdateOrderDto) {
     const orderDto = {
       person_id: updateOrderDto?.person_id,
       product_id: updateOrderDto?.product_id,
       amount: updateOrderDto?.amount,
     };
 
-    const order = await this.orderRepository.preload({
-      id,
-      ...orderDto,
-    });
+    // const order = await this.orderRepository.preload({
+    //   id,
+    //   ...orderDto,
+    // });
 
-    if (!order) throw new NotFoundException(`Order ${id} not found !`);
+    // if (!order) throw new NotFoundException(`Order ${id} not found !`);
 
-    await this.orderRepository.save(order);
+    // await this.orderRepository.save(order);
 
-    return order;
+    // return order;
   }
 
   async remove(id: number) {

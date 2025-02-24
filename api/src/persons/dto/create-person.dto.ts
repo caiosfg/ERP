@@ -16,14 +16,11 @@ export class CreatePersonDto {
 
   @IsNumber()
   @IsNotEmpty()
-  @MinLength(4)
   cnpj: number;
 
   @IsEmail()
   email: string;
 
   @IsNumber()
-  @IsNotEmpty()
-  @MinLength(4)
-  user_id: string;
+  readonly user_id: number;
 }
