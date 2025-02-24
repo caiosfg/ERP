@@ -17,11 +17,11 @@ export class Order {
 
   @ManyToOne(() => Person, (person) => person.id)
   @JoinColumn({ name: 'person_id' })
-  person: Person;
+  person_id: Person;
 
   @ManyToOne(() => Product, (product) => product.id)
   @JoinColumn({ name: 'product_id' })
-  product: Person;
+  product_id: Product;
 
   @Column()
   amount: number;

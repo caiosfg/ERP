@@ -1,4 +1,5 @@
 import { IsEmail } from 'class-validator';
+import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,11 +29,14 @@ export class Person {
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user_id: User;
 
   @CreateDateColumn()
   createdAt?: Date;
 
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  @OneToMany(() => Order, (order) => order.person_id)
+  ordersSend: Order[];
 }
